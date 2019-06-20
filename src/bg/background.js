@@ -25,31 +25,52 @@ chrome.browserAction.onClicked.addListener(function (tab) {
 });
 
 addToRedmine = function (info, tab) {
-    var url = info.pageUrl;
-    console.log("hihi");
-    var subject = tab.title;
-    var description = url;
-    chrome.storage.sync.get("options", function (options) {
-        console.log(options);
-    });
-    var redmineUrl = "http://undertheseanlp.com:8181/issues.json?key=f9f1f1aab2831a01ccdbeacbb97271ebd04d0d9a";
-    var data = {
-        "issue": {
-            "project_id": 1,
-            "subject": subject,
-            "priority_id": 2,
-            "description": description
+    chrome.storage.sync.get(["appConfiguration", "issueConfiguration"], function (result) {
+        if (!_.isEmpty(result)) {
+            if (!_.has(result, "appConfiguration") || !_.has(result, "issueConfiguration")) return;
+            var appConfiguration = result["appConfiguration"];
+            if (!_.has(appConfiguration, "url") || !_.has(appConfiguration, "token")) return;
+
+            var issueConfiguration = result["issueConfiguration"];
+            var apiUrl = appConfiguration["url"] + "issues.json?key=" + appConfiguration["token"];
+            var currentUrl = info.pageUrl;
+            var subject = tab.title;
+            var description = currentUrl;
+            var issue = {
+                "subject": subject,
+                "description": description
+            };
+            try {
+                issue["project_id"] = issueConfiguration["project"]["id"];
+            } catch (e) {
+                return
+            }
+            try {
+                issue["priority_id"] = issueConfiguration["priority"]["id"];
+            } catch (e) {
+            }
+            try {
+                issue["tracker_id"] = issueConfiguration["tracker"]["id"];
+            } catch (e) {
+            }
+            try {
+                issue["status_id"] = issueConfiguration["status"]["id"];
+            } catch (e) {
+            }
+
+            var data = {"issue": issue};
+            $.ajax({
+                type: "POST",
+                url: apiUrl,
+                data: JSON.stringify(data),
+                contentType: 'application/json'
+            }).done(function (data) {
+                console.log(data)
+            }).fail(function () {
+            });
         }
-    };
-    $.ajax({
-        type: "POST",
-        url: redmineUrl,
-        data: JSON.stringify(data),
-        contentType: 'application/json'
-    }).done(function (data) {
-        console.log(data)
-    }).fail(function () {
     });
+
 };
 
 chrome.contextMenus.create({
