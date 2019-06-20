@@ -1,0 +1,27 @@
+{
+  "name": "Redmine Quick Add",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "description": "Redmine Quick Add",
+  "homepage_url": "https://github.com/rain1024/rqa",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "default_locale": "en",
+  "background": {
+    "page": "src/bg/background.html",
+    "persistent": true
+  },
+  "browser_action": {},
+  "options_page": "src/options/index.html",
+  "permissions": [
+    "https://*/",
+    "http://*/",
+    "tabs",
+    "background",
+    "contextMenus",
+    "storage"
+  ]
+}

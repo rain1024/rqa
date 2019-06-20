@@ -1,0 +1,21 @@
+body {
+    background: url("bg1.jpg"),url("bg1-med.jpg"),url("bg1-low.jpg");
+}
+
+#clock  {
+    width: 100%;
+    color: aliceblue;
+    font-family: Courier;
+    text-align: center;
+    font-size: 200px;
+    padding-top: 200px;
+}
+
+#meme {
+    width: 100%;
+    text-align: center;
+    font-size: 40px;
+    color: aliceblue;
+    font-style: italic;
+    font-family: fantasy;
+}
